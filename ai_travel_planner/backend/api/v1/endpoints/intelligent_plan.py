@@ -7,8 +7,12 @@ from pydantic import BaseModel, Field, validator
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 import asyncio
+import sys
+import os
 
-from ...services.planning.intelligent_planner import (
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+
+from services.planning.intelligent_planner import (
     IntelligentPlanner,
     get_intelligent_planner
 )

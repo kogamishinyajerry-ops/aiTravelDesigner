@@ -8,6 +8,10 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 from loguru import logger
 
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+
 from services.planning import (
     TravelStyle, ActivityIntensity, BudgetLevel, AccommodationType,
     TravelRequirements, ProfessionalItinerary,

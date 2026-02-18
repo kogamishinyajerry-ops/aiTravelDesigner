@@ -2,6 +2,7 @@
 旅行规划服务 - 专业版本
 集成所有规划模块，提供标准化、专业化的旅行规划服务
 """
+from typing import Dict, List, Any, Optional
 
 from .professional_standards import (
     TravelStyle, ActivityIntensity, BudgetLevel, AccommodationType,

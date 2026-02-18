@@ -7,6 +7,7 @@ pydantic-settings==2.1.0
 
 # 数据库
 sqlalchemy==2.0.25
+asyncpg==0.29.0
 psycopg2-binary==2.9.9
 alembic==1.13.1
 
@@ -58,4 +59,5 @@ loguru==0.7.2
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 pydantic[email]==2.5.3
+email-validator==2.1.0
 
