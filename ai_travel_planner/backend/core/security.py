@@ -84,12 +84,24 @@ ROLE_PERMISSIONS = {
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """验证密码"""
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        # bcrypt限制密码最大72字节，截断超长密码
+        truncated_password = plain_password[:72] if len(plain_password) > 72 else plain_password
+        return pwd_context.verify(truncated_password, hashed_password)
+    except Exception as e:
+        logger.error(f"Password verification error: {e}")
+        return False
 
 
 def get_password_hash(password: str) -> str:
     """哈希密码"""
-    return pwd_context.hash(password)
+    try:
+        # bcrypt限制密码最大72字节，截断超长密码
+        truncated_password = password[:72] if len(password) > 72 else password
+        return pwd_context.hash(truncated_password)
+    except Exception as e:
+        logger.error(f"Password hashing error: {e}")
+        raise
 
 
 def create_access_token(

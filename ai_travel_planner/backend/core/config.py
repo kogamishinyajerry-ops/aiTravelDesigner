@@ -23,8 +23,8 @@ class Settings(BaseSettings):
         "http://localhost:8000",
     ]
 
-    # 数据库配置
-    DATABASE_URL: str = "postgresql://user:password@localhost:5432/travel_planner"
+    # 数据库配置（使用异步驱动）
+    DATABASE_URL: str = "postgresql+asyncpg://user:password@localhost:5432/travel_planner"
 
     # Redis配置
     REDIS_URL: str = "redis://localhost:6379/0"
