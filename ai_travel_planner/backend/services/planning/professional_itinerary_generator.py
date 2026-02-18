@@ -363,12 +363,20 @@ class ProfessionalItineraryGenerator:
             filtered = [a for a in filtered if a.family_friendly]
         elif requirements.travel_style == TravelStyle.FOODIE:
             filtered = [a for a in filtered if a.nearby_restaurants >= 5]
-        
+
+        # 如果没有匹配的景点，使用所有景点
+        if not filtered:
+            filtered = attractions
+
+        # 如果仍然没有景点，返回空列表
+        if not filtered:
+            return []
+
         # 确定每日景点数量
         activities_per_day = self.standards.get_activities_per_day(
             requirements.activity_intensity
         )
-        
+
         # 轮换景点
         start_idx = (day_index * activities_per_day) % len(filtered)
         day_attractions = filtered[start_idx:start_idx + activities_per_day]

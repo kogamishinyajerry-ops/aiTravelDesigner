@@ -1,0 +1,282 @@
+{
+  "itinerary": {
+    "destination": "越南胡志明市",
+    "start_date": "2026-03-06",
+    "end_date": "2026-03-09",
+    "days": [
+      {
+        "day": 1,
+        "date": "2026-03-06",
+        "weekday": "fri",
+        "season": "spring",
+        "seasonal_tips": [
+          "建议关注spring气候特点"
+        ],
+        "attractions": [],
+        "restaurants": {
+          "lunch": null,
+          "dinner": null
+        },
+        "timeline": [
+          {
+            "time_range": "08:00 - 09:00",
+            "activity_type": "meal",
+            "activity_name": "早餐",
+            "location": "酒店/当地早餐店",
+            "duration_hours": 1.0,
+            "notes": "建议品尝当地特色早餐",
+            "cost": 0
+          }
+        ],
+        "total_activities": 0,
+        "daily_cost": 0,
+        "pace": "relaxed",
+        "walk_distance_estimate": 0.0
+      },
+      {
+        "day": 2,
+        "date": "2026-03-07",
+        "weekday": "sat",
+        "season": "spring",
+        "seasonal_tips": [
+          "建议关注spring气候特点"
+        ],
+        "attractions": [],
+        "restaurants": {
+          "lunch": null,
+          "dinner": null
+        },
+        "timeline": [
+          {
+            "time_range": "08:00 - 09:00",
+            "activity_type": "meal",
+            "activity_name": "早餐",
+            "location": "酒店/当地早餐店",
+            "duration_hours": 1.0,
+            "notes": "建议品尝当地特色早餐",
+            "cost": 0
+          }
+        ],
+        "total_activities": 0,
+        "daily_cost": 0,
+        "pace": "relaxed",
+        "walk_distance_estimate": 0.0
+      },
+      {
+        "day": 3,
+        "date": "2026-03-08",
+        "weekday": "sun",
+        "season": "spring",
+        "seasonal_tips": [
+          "建议关注spring气候特点"
+        ],
+        "attractions": [],
+        "restaurants": {
+          "lunch": null,
+          "dinner": null
+        },
+        "timeline": [
+          {
+            "time_range": "08:00 - 09:00",
+            "activity_type": "meal",
+            "activity_name": "早餐",
+            "location": "酒店/当地早餐店",
+            "duration_hours": 1.0,
+            "notes": "建议品尝当地特色早餐",
+            "cost": 0
+          }
+        ],
+        "total_activities": 0,
+        "daily_cost": 0,
+        "pace": "relaxed",
+        "walk_distance_estimate": 0.0
+      },
+      {
+        "day": 4,
+        "date": "2026-03-09",
+        "weekday": "mon",
+        "season": "spring",
+        "seasonal_tips": [
+          "建议关注spring气候特点"
+        ],
+        "attractions": [],
+        "restaurants": {
+          "lunch": null,
+          "dinner": null
+        },
+        "timeline": [
+          {
+            "time_range": "08:00 - 09:00",
+            "activity_type": "meal",
+            "activity_name": "早餐",
+            "location": "酒店/当地早餐店",
+            "duration_hours": 1.0,
+            "notes": "建议品尝当地特色早餐",
+            "cost": 0
+          }
+        ],
+        "total_activities": 0,
+        "daily_cost": 0,
+        "pace": "relaxed",
+        "walk_distance_estimate": 0.0
+      }
+    ],
+    "total_budget": 39000,
+    "adults": 6,
+    "style": "cultural",
+    "intensity": "2"
+  },
+  "budget": {
+    "total_budget": 39000,
+    "per_person": 6500,
+    "breakdown": {
+      "destination": "越南胡志明市",
+      "departure": "上海",
+      "days": 4,
+      "travelers": 6,
+      "total_cost": 42636.0,
+      "per_person": 7106.0,
+      "per_day": 10659.0,
+      "breakdown": {
+        "transport": {
+          "total": 24000,
+          "items": [
+            {
+              "name": "往返机票 (上海 → 越南胡志明市)",
+              "cost": 24000,
+              "unit_cost": 4000,
+              "quantity": 6
+            }
+          ]
+        },
+        "accommodation": {
+          "total": 6000.0,
+          "items": [
+            {
+              "name": "住宿 (standard, 3间 × 4晚)",
+              "cost": 6000.0,
+              "unit_cost": 1500.0,
+              "quantity": 4
+            }
+          ]
+        },
+        "food": {
+          "total": 3840.0,
+          "items": [
+            {
+              "name": "餐饮 (standard, 4天 × 6人)",
+              "cost": 3840.0,
+              "unit_cost": 960.0,
+              "quantity": 4
+            }
+          ]
+        },
+        "attraction": {
+          "total": 2880,
+          "items": [
+            {
+              "name": "景点门票 (约12个景点 × 6人)",
+              "cost": 2880,
+              "unit_cost": 240,
+              "quantity": 12
+            }
+          ]
+        },
+        "transport_local": {
+          "total": 1440,
+          "items": [
+            {
+              "name": "当地交通 (4天 × 6人)",
+              "cost": 1440,
+              "unit_cost": 360,
+              "quantity": 4
+            }
+          ]
+        },
+        "insurance": {
+          "total": 600,
+          "items": [
+            {
+              "name": "旅行保险",
+              "cost": 600,
+              "unit_cost": 100,
+              "quantity": 6
+            }
+          ]
+        },
+        "other": {
+          "total": 3876.0,
+          "items": [
+            {
+              "name": "其他费用（购物、应急等）",
+              "cost": 3876.0,
+              "unit_cost": 3876.0,
+              "quantity": 1
+            }
+          ]
+        }
+      },
+      "cost_items": [
+        {
+          "category": "transport",
+          "name": "往返机票 (上海 → 越南胡志明市)",
+          "unit_cost": 4000,
+          "quantity": 6,
+          "total_cost": 24000
+        },
+        {
+          "category": "accommodation",
+          "name": "住宿 (standard, 3间 × 4晚)",
+          "unit_cost": 1500.0,
+          "quantity": 4,
+          "total_cost": 6000.0
+        },
+        {
+          "category": "food",
+          "name": "餐饮 (standard, 4天 × 6人)",
+          "unit_cost": 960.0,
+          "quantity": 4,
+          "total_cost": 3840.0
+        },
+        {
+          "category": "attraction",
+          "name": "景点门票 (约12个景点 × 6人)",
+          "unit_cost": 240,
+          "quantity": 12,
+          "total_cost": 2880
+        },
+        {
+          "category": "transport_local",
+          "name": "当地交通 (4天 × 6人)",
+          "unit_cost": 360,
+          "quantity": 4,
+          "total_cost": 1440
+        },
+        {
+          "category": "insurance",
+          "name": "旅行保险",
+          "unit_cost": 100,
+          "quantity": 6,
+          "total_cost": 600
+        },
+        {
+          "category": "other",
+          "name": "其他费用（购物、应急等）",
+          "unit_cost": 3876.0,
+          "quantity": 1,
+          "total_cost": 3876.0
+        }
+      ],
+      "suggestions": [
+        "部分景点有联票或学生优惠，建议提前查询",
+        "提前预订机票和酒店可节省10-30%",
+        "避开旅游旺季可降低成本",
+        "准备现金，部分小店可能有折扣"
+      ]
+    }
+  },
+  "recommendations": [
+    "建议关注spring气候特点"
+  ],
+  "session_id": "WS-20260218095427"
+}
