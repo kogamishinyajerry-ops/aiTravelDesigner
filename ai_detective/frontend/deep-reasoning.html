@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 侦探 - 深度推理分析</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .section-card {
+            transition: all 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+        .confidence-bar {
+            transition: width 0.5s ease;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: #e2e8f0;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <div class="max-w-7xl mx-auto">
+        <!-- 标题 -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-2">🔍 AI 侦探 - 深度推理分析</h1>
+            <p class="text-white/80">基于时间序列、因果推理、矛盾检测的智能分析</p>
+        </div>
+
+        <!-- 输入区域 -->
+        <div class="glass rounded-2xl p-6 mb-6 shadow-xl">
+            <h2 class="text-xl font-bold mb-4 text-gray-800">📝 案件描述</h2>
+            <textarea id="caseDescription" rows="6"
+                class="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none"
+                placeholder="请详细描述您的案件,包括时间、地点、人物、事件经过等..."></textarea>
+
+            <div class="mt-4 flex flex-wrap gap-4">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" id="useV3" checked class="w-5 h-5 text-purple-600 rounded">
+                    <span class="text-gray-700">使用 V3 推理器 (支持网络侵权)</span>
+                </label>
+                <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" id="useDeepReasoning" checked class="w-5 h-5 text-purple-600 rounded">
+                    <span class="text-gray-700 font-bold">启用深度推理 ⭐</span>
+                </label>
+            </div>
+
+            <button id="analyzeBtn"
+                class="mt-4 w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">
+                🔎 开始深度分析
+            </button>
+        </div>
+
+        <!-- 加载状态 -->
+        <div id="loading" class="hidden glass rounded-2xl p-8 mb-6 shadow-xl text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-4 border-purple-600 border-t-transparent mx-auto mb-4"></div>
+            <p class="text-gray-700 text-lg">正在执行深度推理分析...</p>
+            <p class="text-gray-500 text-sm mt-2">这可能需要几秒钟时间</p>
+        </div>
+
+        <!-- 结果区域 -->
+        <div id="results" class="hidden space-y-6">
+            <!-- 综合评分 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">📊 综合评分</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4">
+                        <div class="text-sm text-blue-600 mb-1">基础分析置信度</div>
+                        <div class="text-3xl font-bold text-blue-700" id="baseConfidence">0.00</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4">
+                        <div class="text-sm text-purple-600 mb-1">深度推理置信度</div>
+                        <div class="text-3xl font-bold text-purple-700" id="deepConfidence">0.00</div>
+                    </div>
+                    <div class="bg-gradient-to-br from-pink-50 to-pink-100 rounded-xl p-4">
+                        <div class="text-sm text-pink-600 mb-1">综合评分</div>
+                        <div class="text-3xl font-bold text-pink-700" id="combinedConfidence">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 时间序列分析 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">⏰ 时间序列分析</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="text-sm text-gray-600">提取时间戳</div>
+                        <div class="text-2xl font-bold text-gray-800" id="timestampCount">0</div>
+                        <div class="text-sm text-gray-600 mt-2">时间线</div>
+                        <div class="text-lg text-gray-700" id="timeRange">-</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="text-sm text-gray-600">时间冲突</div>
+                        <div class="text-2xl font-bold text-red-600" id="timeConflictCount">0</div>
+                        <div class="text-sm text-gray-600 mt-2">逻辑有效性</div>
+                        <div class="text-lg font-bold" id="timeLogicValid">-</div>
+                    </div>
+                </div>
+                <div id="timeConflicts" class="space-y-2"></div>
+            </div>
+
+            <!-- 因果关系分析 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">🔗 因果关系分析</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                    <div class="bg-blue-50 rounded-lg p-3">
+                        <div class="text-sm text-blue-600">因果关系</div>
+                        <div class="text-xl font-bold text-blue-700" id="causalRelationsCount">0</div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-3">
+                        <div class="text-sm text-green-600">因果链</div>
+                        <div class="text-xl font-bold text-green-700" id="causalChainsCount">0</div>
+                    </div>
+                    <div class="bg-orange-50 rounded-lg p-3">
+                        <div class="text-sm text-orange-600">因果缺口</div>
+                        <div class="text-xl font-bold text-orange-700" id="causalGapsCount">0</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-3">
+                        <div class="text-sm text-purple-600">根本原因置信度</div>
+                        <div class="text-xl font-bold text-purple-700" id="rootCauseConfidence">0.00</div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-lg p-4 mb-2">
+                    <div class="text-sm text-gray-600">根本原因</div>
+                    <div class="text-lg font-semibold text-gray-800" id="rootCause">-</div>
+                </div>
+            </div>
+
+            <!-- 矛盾检测 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">⚠️ 矛盾检测</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-red-50 rounded-lg p-3">
+                        <div class="text-sm text-red-600">总矛盾数</div>
+                        <div class="text-xl font-bold text-red-700" id="totalConflicts">0</div>
+                    </div>
+                    <div class="bg-orange-50 rounded-lg p-3">
+                        <div class="text-sm text-orange-600">事实矛盾</div>
+                        <div class="text-xl font-bold text-orange-700" id="factConflictsCount">0</div>
+                    </div>
+                    <div class="bg-yellow-50 rounded-lg p-3">
+                        <div class="text-sm text-yellow-600">证据矛盾</div>
+                        <div class="text-xl font-bold text-yellow-700" id="evidenceConflictsCount">0</div>
+                    </div>
+                </div>
+                <div id="conflictDetails" class="space-y-2"></div>
+            </div>
+
+            <!-- 预谋性分析 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">🎯 预谋性分析</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div class="bg-gradient-to-br from-red-50 to-orange-50 rounded-lg p-4" id="premeditationCard">
+                        <div class="text-sm text-gray-600">是否预谋</div>
+                        <div class="text-2xl font-bold" id="isPremeditated">-</div>
+                        <div class="text-sm text-gray-600 mt-2">预谋得分</div>
+                        <div class="text-lg font-semibold" id="premeditationScore">0.00</div>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="text-sm text-gray-600">预谋迹象</div>
+                        <div class="text-lg font-semibold text-gray-800" id="premeditationIndicatorsCount">0</div>
+                        <div class="text-sm text-gray-600 mt-2">推理说明</div>
+                        <div class="text-sm text-gray-700" id="premeditationReasoning">-</div>
+                    </div>
+                </div>
+                <div id="premeditationIndicators" class="space-y-1"></div>
+            </div>
+
+            <!-- 证据链分析 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">🔒 证据链分析</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div class="bg-blue-50 rounded-lg p-3">
+                        <div class="text-sm text-blue-600">完整度</div>
+                        <div class="text-xl font-bold text-blue-700" id="evidenceCompleteness">0.00</div>
+                    </div>
+                    <div class="bg-green-50 rounded-lg p-3">
+                        <div class="text-sm text-green-600">一致性</div>
+                        <div class="text-xl font-bold text-green-700" id="evidenceConsistency">0.00</div>
+                    </div>
+                    <div class="bg-purple-50 rounded-lg p-3">
+                        <div class="text-sm text-purple-600">强度</div>
+                        <div class="text-xl font-bold text-purple-700" id="evidenceStrength">-</div>
+                    </div>
+                </div>
+                <div id="evidenceGaps" class="space-y-2"></div>
+            </div>
+
+            <!-- 建议 -->
+            <div class="glass rounded-2xl p-6 shadow-xl section-card">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">💡 深度推理建议</h2>
+                <div id="recommendations" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        document.getElementById('analyzeBtn').addEventListener('click', async () => {
+            const description = document.getElementById('caseDescription').value.trim();
+            if (!description) {
+                alert('请输入案件描述');
+                return;
+            }
+
+            const useV3 = document.getElementById('useV3').checked;
+            const useDeepReasoning = document.getElementById('useDeepReasoning').checked;
+
+            // 显示加载状态
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('results').classList.add('hidden');
+
+            try {
+                const response = await fetch(`${API_BASE}/analyze`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        description,
+                        use_v3: useV3,
+                        use_deep_reasoning: useDeepReasoning,
+                        context: {}
+                    })
+                });
+
+                const result = await response.json();
+
+                // 隐藏加载状态
+                document.getElementById('loading').classList.add('hidden');
+
+                // 显示结果
+                displayResults(result);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('分析失败,请确保后端服务已启动');
+                document.getElementById('loading').classList.add('hidden');
+            }
+        });
+
+        function displayResults(result) {
+            document.getElementById('results').classList.remove('hidden');
+
+            // 综合评分
+            if (result.deep_reasoning) {
+                document.getElementById('baseConfidence').textContent = result.confidence.toFixed(2);
+                document.getElementById('deepConfidence').textContent = result.deep_reasoning.deep_confidence.toFixed(2);
+                const combined = (result.confidence + result.deep_reasoning.deep_confidence) / 2;
+                document.getElementById('combinedConfidence').textContent = combined.toFixed(2);
+            }
+
+            // 时间序列分析
+            if (result.deep_reasoning && result.deep_reasoning.time_analysis) {
+                const ta = result.deep_reasoning.time_analysis;
+                document.getElementById('timestampCount').textContent = ta.timestamps_count || 0;
+                document.getElementById('timeRange').textContent = ta.timeline?.time_range || '-';
+                document.getElementById('timeConflictCount').textContent = ta.time_conflicts?.length || 0;
+                const logicValid = ta.logic_valid;
+                document.getElementById('timeLogicValid').textContent = logicValid ? '✅ 有效' : '❌ 无效';
+                document.getElementById('timeLogicValid').className = `text-lg font-bold ${logicValid ? 'text-green-600' : 'text-red-600'}`;
+
+                // 时间冲突
+                const conflictsHtml = (ta.time_conflicts || []).map(c => `
+                    <div class="bg-red-50 border-l-4 border-red-500 p-3 rounded">
+                        <div class="text-sm text-red-700">${c.description || '时间冲突'}</div>
+                        <div class="text-xs text-gray-500 mt-1">严重程度: ${c.severity}</div>
+                    </div>
+                `).join('');
+                document.getElementById('timeConflicts').innerHTML = conflictsHtml || '<div class="text-gray-500">未发现时间冲突</div>';
+            }
+
+            // 因果关系分析
+            if (result.deep_reasoning && result.deep_reasoning.causal_analysis) {
+                const ca = result.deep_reasoning.causal_analysis;
+                document.getElementById('causalRelationsCount').textContent = ca.relations_count || 0;
+                document.getElementById('causalChainsCount').textContent = ca.chains_count || 0;
+                document.getElementById('causalGapsCount').textContent = ca.gaps_count || 0;
+                document.getElementById('rootCause').textContent = ca.root_cause || '-';
+                document.getElementById('rootCauseConfidence').textContent = (ca.root_cause_confidence || 0).toFixed(2);
+            }
+
+            // 矛盾检测
+            if (result.deep_reasoning && result.deep_reasoning.conflict_analysis) {
+                const cf = result.deep_reasoning.conflict_analysis;
+                document.getElementById('totalConflicts').textContent = cf.total_conflicts || 0;
+                document.getElementById('factConflictsCount').textContent = cf.fact_conflicts?.length || 0;
+                document.getElementById('evidenceConflictsCount').textContent = cf.evidence_conflicts?.length || 0;
+
+                const conflictsHtml = [...(cf.fact_conflicts || []), ...(cf.evidence_conflicts || [])].map(c => `
+                    <div class="bg-orange-50 border-l-4 border-orange-500 p-3 rounded">
+                        <div class="text-sm text-orange-700">${c.description}</div>
+                    </div>
+                `).join('');
+                document.getElementById('conflictDetails').innerHTML = conflictsHtml || '<div class="text-gray-500">未发现矛盾</div>';
+            }
+
+            // 预谋性分析
+            if (result.deep_reasoning && result.deep_reasoning.premeditation_analysis) {
+                const pa = result.deep_reasoning.premeditation_analysis;
+                const isPremeditated = pa.is_premeditated;
+                document.getElementById('isPremeditated').textContent = isPremeditated ? '✅ 是' : '❌ 否';
+                document.getElementById('isPremeditated').className = `text-2xl font-bold ${isPremeditated ? 'text-red-600' : 'text-green-600'}`;
+                document.getElementById('premeditationScore').textContent = pa.premeditation_score.toFixed(2);
+                document.getElementById('premeditationIndicatorsCount').textContent = pa.indicators?.length || 0;
+                document.getElementById('premeditationReasoning').textContent = pa.reasoning || '-';
+
+                const indicatorsHtml = (pa.indicators || []).map(ind => `
+                    <div class="bg-yellow-50 px-3 py-2 rounded-full text-sm text-yellow-700 inline-block mr-2 mb-2">
+                        • ${ind}
+                    </div>
+                `).join('');
+                document.getElementById('premeditationIndicators').innerHTML = indicatorsHtml || '<div class="text-gray-500">无预谋迹象</div>';
+            }
+
+            // 证据链分析
+            if (result.deep_reasoning && result.deep_reasoning.evidence_chain) {
+                const ec = result.deep_reasoning.evidence_chain;
+                document.getElementById('evidenceCompleteness').textContent = ec.completeness.toFixed(2);
+                document.getElementById('evidenceConsistency').textContent = ec.consistency.toFixed(2);
+                const strength = ec.strength || 'weak';
+                document.getElementById('evidenceStrength').textContent = strength;
+                document.getElementById('evidenceStrength').className = `text-xl font-bold ${
+                    strength === 'strong' ? 'text-green-700' :
+                    strength === 'moderate' ? 'text-yellow-700' : 'text-red-700'
+                }`;
+
+                const gapsHtml = (ec.gaps || []).map(g => `
+                    <div class="bg-gray-50 border-l-4 border-gray-400 p-3 rounded">
+                        <div class="text-sm text-gray-700">${g}</div>
+                    </div>
+                `).join('');
+                document.getElementById('evidenceGaps').innerHTML = gapsHtml || '<div class="text-gray-500">证据链较为完整</div>';
+            }
+
+            // 建议
+            if (result.deep_reasoning && result.deep_reasoning.recommendations) {
+                const recommendationsHtml = result.deep_reasoning.recommendations.map(rec => `
+                    <div class="bg-blue-50 p-3 rounded-lg text-blue-800">${rec}</div>
+                `).join('');
+                document.getElementById('recommendations').innerHTML = recommendationsHtml;
+            }
+
+            // 滚动到结果
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
